@@ -1,0 +1,151 @@
+000100160520             PGM        PARM(&ENV)
+000200060303
+000300170331             DCLPRCOPT  DFTACTGRP(*NO) ACTGRP(*NEW)
+000400170331
+000500170331             DCL        VAR(&ENV) TYPE(*CHAR) LEN(10)
+000600160520             DCL        VAR(&DATE) TYPE(*CHAR) LEN(6)
+000700060303             DCL        VAR(&DATE8) TYPE(*CHAR) LEN(8)
+000800170331
+000900170331             DCL        VAR(&STATUS) TYPE(*CHAR) LEN(1)
+001000170331             DCL        VAR(&STATE) TYPE(*CHAR) LEN(10)
+001100170331
+001200060303             DCLF       FILE(TESTDB)
+001300110817
+001400110817             MONMSG     MSGID(CPD32E7 CPF32C6) /* Finns inga +
+001500110817                          triggers */
+001600060303
+001700060303             RTVJOBA    DATE(&DATE)
+001800060303             CHGVAR     VAR(%SST(&DATE8 1 2)) VALUE('20')
+001900060303             CHGVAR     VAR(%SST(&DATE8 3 6)) VALUE(&DATE)
+002000060303
+002100060303             CHGVAR     VAR(%SST(*LDA 313 8)) +
+002200060303                        VALUE(&DATE8)
+002300060303
+002400160520             IF         COND(&ENV = 'SFBIO') THEN(DO)
+002500160520             ENDSBS     SBS(SYSTEM99) OPTION(*IMMED)
+002600160520             MONMSG     MSGID(CPF0000 CPD0000 CPA0000)
+002700160520             ENDDO
+002800160516
+002900160520             IF         COND(&ENV = 'SFKINO') THEN(DO)
+003000160520             ENDSBS     SBS(SFKINO99) OPTION(*IMMED)
+003100160520             MONMSG     MSGID(CPF0000 CPD0000 CPA0000)
+003200160520             ENDDO
+003300160520
+003400060303             DLYJOB     DLY(60)
+003500991219
+003600160516             CHGPFTRG   FILE(BJREG)  TRG(*ALL) STATE(*DISABLED)
+003700160516             CHGPFTRG   FILE(FILM)   TRG(*ALL) STATE(*DISABLED)
+003800160516             CHGPFTRG   FILE(BIOPGM) TRG(*ALL) STATE(*DISABLED)
+003900070416
+004000160516             CHGPFTRG   FILE(GODFTG) TRG(*ALL) STATE(*DISABLED)
+004100160516             CHGPFTRG   FILE(GODPAK) TRG(*ALL) STATE(*DISABLED)
+004200160516             CHGPFTRG   FILE(GODGRP) TRG(*ALL) STATE(*DISABLED)
+004300160516             CHGPFTRG   FILE(GODART) TRG(*ALL) STATE(*DISABLED)
+004400160516             CHGPFTRG   FILE(GODLAG) TRG(*ALL) STATE(*DISABLED)
+004500160516             CHGPFTRG   FILE(CATEGORY) TRG(*ALL) STATE(*DISABLED)
+004600160926
+004700060303NEXT:        RCVF
+004800060303             MONMSG     MSGID(CPF0864) EXEC(GOTO CMDLBL(EOF))
+004900060303
+005000170331             ALCOBJ     OBJ((&LCLLIB/&LCLFILE *FILE *EXCL))
+005100170331             MONMSG     MSGID(CPF0000) EXEC(GOTO NEXT)
+005200170331
+005300170331             CHGVAR     VAR(&STATE) VALUE('*DISABLED')
+005400170331
+005500170331             CALLPRC    PRC(changeCstStatus) PARM((&LCLLIB *BYVAL) +
+005600170331                          (&LCLFILE *BYVAL) (&STATE *BYVAL)) +
+005700170331                          RTNVAL(&STATUS)
+005800170331
+005900170331             IF         COND(&STATUS = '1') THEN(DO)
+006000170331
+006100170331                CHGDDMF    FILE(TESTDDM) RMTFILE(&RMTLIB/&RMTFILE) RMTLOCNAME('10.64.2.64')
+006200010423
+006300170331                CPYF       FROMFILE(TESTDDM) TOFILE(&LCLLIB/&LCLFILE) MBROPT(*REPLACE) +
+006400170331                             FMTOPT(*MAP *DROP)
+006500170331                MONMSG     MSGID(CPF2817)
+006600010822
+006700170331                CHGVAR     VAR(&STATE) VALUE('*ENABLED')
+006800170331
+006900170403                CALLPRC    PRC(CHANGECSTSTATUS) PARM((&LCLLIB *BYVAL) +
+007000170403                              (&LCLFILE *BYVAL) (&STATE *BYVAL)) +
+007100170403                           RTNVAL(&STATUS)
+007200170331
+007300170331             ENDDO
+007400170331
+007500170403             DLCOBJ     OBJ((&LCLLIB/&LCLFILE *FILE *EXCL))
+007600170403             MONMSG     MSGID(CPF0000) EXEC(GOTO NEXT)
+007700170403
+007800060303             GOTO       CMDLBL(NEXT)
+007900060303
+008000060303EOF:
+008100160516/*                                                                            */
+008200160516/* Uppdatera USER_ID på inkopierade godisregister                             */
+008300160516/*                                                                            */
+008400160516             CALL       PGM(FIX160429)
+008500160516/*                                                                            */
+008600160516/* Uppdatera SEQUENCE för CATEGORY                                            */
+008700160516/*                                                                            */
+008800160516             CALL       PGM(FIX160430)
+008900160516/*                                                                            */
+009000160516/* Uppdatera SEQUENCE för GODART                                              */
+009100160516/*                                                                            */
+009200160516             CALL       PGM(FIX160501)
+009300160516
+009400060303/*                                                                  */
+009500060303/*   Uppdatera FÖREG                                                */
+009600060303/*                                                                  */
+009700170331/* Uppdatera FÖREG                                                  */
+009800170331
+009900170331             CLRPFM     FILE(&LCLLIB/FÖREG)
+010000170331             CHGDDMF    FILE(TESTDDM) RMTFILE(SFBIODTA/FÖREGLL) +
+010100170331                          RMTLOCNAME('10.64.2.64')
+010200170331
+010300170331             IF         COND(&ENV *EQ 'SFBIODEV') THEN(DO)
+010400170331             CALL       PGM(FIX002)
+010500170331             ENDDO
+010600170331             ELSE       CMD(DO)
+010700170330             CALL       PGM(FIX001)
+010800170330             ENDDO
+010900060303/*                                                                  */
+011000060303/*   Uppdatera BIOPGM                                               */
+011100060303/*                                                                  */
+011200170331             CLRPFM     FILE(&LCLLIB/BIOPGM)
+011300160520
+011400160516             CHGDDMF    FILE(TESTDDM) +
+011500160520                          RMTFILE(SFBIODTA/BIOPGM03) +
+011600090313                          RMTLOCNAME('10.64.2.64')
+011700060303
+011800160520             IF         COND(&ENV = 'SFKINO') THEN(DO)
+011900160520             CHGDDMF    FILE(TESTDDM) +
+012000160520                          RMTFILE(SFKINODTA/BIOPGM03) +
+012100160520                          RMTLOCNAME('10.64.2.64')
+012200160520             ENDDO
+012300160520
+012400170330             IF         COND(&ENV *EQ 'SFBIODEV') THEN(DO)
+012500170330             CALL       PGM(FIX006)
+012600170330             ENDDO
+012700170330             ELSE       CMD(DO)
+012800170330             CALL       PGM(FIX005)
+012900170330             ENDDO
+013000060303/*                                                                  */
+013100060303/*   Kör generering                                                 */
+013200060303/*                                                                  */
+013300060303             CLRPFM     FILE(BJREG)
+013400060303             CLRPFM     FILE(SÖREG)
+013500060303
+013600170330             IF         COND(&ENV *NE 'SFBIODEV') THEN(DO)
+013700060303             CALL       PGM(PFÖ70A)
+013800170330             ENDDO
+013900060303
+014000160516             CHGPFTRG   FILE(BJREG)  TRG(*ALL) STATE(*ENABLED)
+014100160516             CHGPFTRG   FILE(FILM)   TRG(*ALL) STATE(*ENABLED)
+014200160516             CHGPFTRG   FILE(BIOPGM) TRG(*ALL) STATE(*ENABLED)
+014300070416
+014400160516             CHGPFTRG   FILE(GODFTG) TRG(*ALL) STATE(*ENABLED)
+014500160516             CHGPFTRG   FILE(GODPAK) TRG(*ALL) STATE(*ENABLED)
+014600160516             CHGPFTRG   FILE(GODGRP) TRG(*ALL) STATE(*ENABLED)
+014700160516             CHGPFTRG   FILE(GODART) TRG(*ALL) STATE(*ENABLED)
+014800160516             CHGPFTRG   FILE(GODLAG) TRG(*ALL) STATE(*ENABLED)
+014900160516             CHGPFTRG   FILE(CATEGORY) TRG(*ALL) STATE(*ENABLED)
+015000120615
+015100060303             ENDPGM

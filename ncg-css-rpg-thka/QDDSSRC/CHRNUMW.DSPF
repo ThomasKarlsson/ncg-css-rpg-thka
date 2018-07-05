@@ -1,0 +1,32 @@
+000001170126      ****************************************************************
+000002170126      *
+000003170126      * Member CHRNUMW from ILESRC
+000004170126      *
+000005170126      * CHRNUMW - Edit character coded numbers
+000006170126      *
+000007170126      ****************************************************************
+000008170126     A                                      DSPSIZ(24 80 *DS3)
+000009170126     A                                      CA03(03 'End')
+000010170126      * Format to enter a character number and required decimal pos.
+000011170126     A          R CHRNUMWR
+000012170126     A                                  5  4'Enter a number without special cha-
+000013170126     A                                       racters:'
+000014170126     A                                      DSPATR(HI)
+000015170126     A            CHRNBR        15A  B  6  5
+000016170126     A                                  8  4'Enter number of decimal positions -
+000017170126     A                                      you want to have in the edited numb-
+000018170126     A                                      er:'
+000019170126     A                                      DSPATR(HI)
+000020170126     A            DECPOS         3  0B  9  5EDTCDE(4)
+000021170126      * Format to show resulting edited number
+000022170126     A          R CHRNUMWR2
+000023170126     A                                  4  4'Character coded number:'
+000024170126     A            CHRNBR        15A  O  6  5
+000025170126     A                                  8  4'Required decimal positions:'
+000026170126     A            DECPOS         3Y 0O  9  5EDTCDE(3)
+000027170126     A                                 12  4'Resulting edited number:'
+000028170126     A            EDTNBR        16A  O 13  5DSPATR(RI)
+000029170126     A                                 16  5'Press Enter.'
+000030170126     A                                      COLOR(BLU)
+000031170126     A                                 23  2'F3=Exit'
+000032170126     A                                      COLOR(BLU)

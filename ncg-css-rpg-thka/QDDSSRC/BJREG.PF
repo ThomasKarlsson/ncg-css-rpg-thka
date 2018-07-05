@@ -1,0 +1,143 @@
+000100881129     ******************************************************************--------
+000200090526     **                                                               *
+000300881129     **  BJREG  Biljettregister                   BJREG               *
+000400881129     **                                                               *
+000500960110     **
+000600960110     **         Ändrat 1996-02-01   P H Cuecumber AB
+000700960110     **
+000800960110     **         2 nya fält BJOPR2 och BJOPR3 = pris 2 och 3
+000900960110     **
+001000060920     **---------------------------------------------------------------*
+001100060920     **  B. Ström SYSteam 2006-09-20                                  *
+001200060920     **  Nya fält för hantering av VIP stolar                         *
+001300090503     **  B. Ström SYSteam 2009-04-03                                  *
+001400090503     **  Nytt fält för hantera nya stolsnumreringen SF Kino R3        *
+001500111116     **   2011-11-16  Björn Ljunggren, Bizt                              **
+001600111116     **               Uttöka fält BJCDVI till 42 för ALIAS
+001700111116     **               Nytt fält BJTPAN för TrunkeratPan för ALIAS
+001800111221     **   2011-12-21  B. Ström SYSteam                                   **
+001900111221     **               Nytt fält i BJREG - BJRESAVG för att avgöra
+002000111221     **               om reservationsavift skall tas ut eller inte.
+002100160323     **
+002200160323     **   2016-03-23  B. Ström EVRY
+002300160323     **               Ändrade fältlängder på beloppsfält 9,2
+002400160323     **               och alla fält via Fltref
+002500161206     **
+002600161206     **   2016-12-06  P. Ågrup Bromma Konsult
+002700161206     **   Nya fält för auditorium
+002800161206     **
+002900170601     **   2017-02-01  ThKa
+003000170601     **               DigNo   (BJDIGNO   )förlängt till 13 alfa
+003100170601     **
+003200170601     **   2017-06-01  P. Ågrup Bromma Konsult
+003300170601     **   Nya fält för kunddata
+003400170201     **
+003500881129     ******************************************************************--------
+003600881129                                            REF(FLTREF)
+003700881129                R RBJREG
+003800881129                  BJSTS     R
+003900881129                  BJBIO     R
+004000881129                  BJSAL     R
+004100910612                  BJSEK     R
+004200881129                  BJDAT     R
+004300881129                  BJTID     R
+004400881129                  BJORNR    R
+004500881129                  BJSEKT    R
+004600881129                  BJRAD     R
+004700881129                  BJPLTS    R
+004800881129                  BJSTOL    R
+004900910618                  BJPRKL    R
+005000960110                  BJPRCD    R
+005100881129                  BJOPRI    R
+005200881129                  BJBPRI    R
+005300910618                  BJAPRI    R
+005400881129                  BJRKOD    R
+005500910612                  BJRTYP    R
+005600930505                  BJMBNR    R
+005700930527                  BJNMN     R
+005800920508                  BJPENR    R
+005900920508                  BJKAT     R
+006000881129                  BJFDAT    R
+006100881129                  BJFSTL    R
+006200881129                  BJKASS    R
+006300881129                  BJFTID    R
+006400881129                  BJWS      R
+006500881129                  BJRAB     R
+006600910619                  BJARR     R
+006700910619                  BJEVNR    R
+006800881129                  BJÅTER    R
+006900881129                  BJWRT     R
+007000881129                  BJVHK     R
+007100881129                  BJONUM    R
+007200881129                  BJFKTO    R
+007300910612                  BJAKTO    R
+007400881129                  BJKOLL    R
+007500930527                  BJBB      R
+007600930527                  BJFS      R
+007700930527                  BJFA      R
+007800930603                  BJREKV    R
+007900930608                  BJSEN     R
+008000990615      *
+008100990615      *           Nya fält för SYSTEM99
+008200990615      *
+008300990222                  BJIDNR    R
+008400990222                  BJFSDT    R
+008500990222                  BJFSTD    R
+008600990615                  BJEXT1    R
+008700990615                  BJEXT2    R
+008800990615                  BJEXT3    R
+008900990615      *
+009000990615      *           Nya fält BIOKLUBBEN etc
+009100990615      *
+009200990705                  BJCDVA    R
+009300180102     ******       BJCDBK    R
+009400170607                  BJPGPL    R
+009500170607                  BJPGMI    R
+009600170607                  BJPGBO    R
+009700170607                  BJPGPE    R
+009800990702                  BJCANR    R
+009900990702                  BJVADT    R
+010000990702                                            COLHDG('Datum van-' 'ligt folk')
+010100990615      *
+010200990615      *           Nya fält Betalningar via Internet/Talsvar
+010300990615      *
+010400990615                  BJSLTD    R
+010500990615                  BJBTCD    R
+010600991018                  BJCDVI    R
+010700991018                  BJBEIN    R
+010800060920      *
+010900060920      *           Nya fält VIP-stolar
+011000060920      *
+011100160323                  BJVIP     R
+011200160323                  BJDSTL    R
+011300111117      *
+011400111123      *           Fält för Trunkerat Pan
+011500111117      *
+011600111116                  BJTPAN    R
+011700111123      *
+011800111123      *           Fält för Referensnummer
+011900111123      *
+012000111123                  BJREFNO   R
+012100111221      *
+012200160426      *           Fält för Reserverationsavgift
+012300111221      *
+012400111221                  BJRESAVG  R
+012500160426      *
+012600160426      *           Fält för Förköpsavgift
+012700160426      *
+012800160426                  BJFORKOP  R
+012900160927      *
+013000160927      *           Digitala biljetter
+013100160927      *
+013200160927                  BJDIGNO   R
+013300160927                  BJDIGSTAT R
+013400161206      *
+013500161206      *           Nya fält för auditorium
+013600161206      *
+013700161206                  BJSEATID  R               REFFLD(SEATID)
+013800161209
+013900161206                  BJLAYOUTIDR               REFFLD(LAYOUTID)
+014000170601      *
+014100170601      *           Nya fält för kunddata
+014200170601      *
+014300170601                  BJMEMBER  R
